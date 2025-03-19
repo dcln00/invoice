@@ -29,8 +29,8 @@ const handleReset = () => {
 
 const show = ref(false)
 const isSaving = ref(false)
+const isDownloading = ref(false)
 const screenshot = ref('')
-const url = ref('')
 const file = ref('')
 const invoice = ref()
 const width = ref(0)
@@ -46,8 +46,40 @@ onNuxtReady(async () => {
 	const { width: w, height: h } = useElementSize(invoice)
 	width.value = w.value
 	height.value = h.value
+})
 
-	if(invoice.value.inv) {
+const DownloadPDF = async () => {
+	try {
+		isDownloading.value = true
+
+		if(invoice.value.inv) {
+		const canvas = await $screenshot(invoice.value.inv, {
+			scale: 3
+		})
+		screenshot.value = canvas
+		const pdf = new $pdf({
+			orientation: "p",
+			unit: "px",
+			format: [width.value, height.value]
+		})
+		const img = pdf.getImageProperties(screenshot.value)
+		const pdfw = pdf.internal.pageSize.getWidth()
+		const pdfh = (img.height * pdfw) / img.width
+		pdf.addImage(screenshot.value, 'PNG', 0, 0, pdfw, pdfh, undefined, 'FAST')
+		pdf.save(`${props.input.invoiceNumber}.pdf`)
+	}
+
+	} finally {
+
+		isDownloading.value = false
+	}
+}
+
+const sendToEmail = async () => {
+	try {
+		isSaving.value = true
+
+		if(invoice.value.inv) {
 			const canvas = await $screenshot(invoice.value.inv, {
 				scale: 3
 			})
@@ -61,14 +93,8 @@ onNuxtReady(async () => {
 			const pdfw = pdf.internal.pageSize.getWidth()
 			const pdfh = (img.height * pdfw) / img.width
 			pdf.addImage(screenshot.value, 'PNG', 0, 0, pdfw, pdfh, undefined, 'FAST')
-			url.value = pdf.output('bloburl')
 			file.value = pdf.output('datauristring')
 		}
-})
-
-const sendToEmail = async () => {
-	try {
-		isSaving.value = true
 
 		const res = await $fetch('/api/mail', {
 			method: 'post',
@@ -100,8 +126,9 @@ section#body-outlet
 		div(:class="['bg-neutral-200 h-screen p-6 w-2/3 overflow-auto', {'!w-full': !show}]")
 			svgo-slider(v-if="!show" class="absolute top-5 right-4 text-neutral-800 text-lg cursor-pointer" @click="toggleShow")
 			.buttons(class="space-x-4 pb-6 flex justify-center")
-				a(:href="url" :download="`${input.invoiceNumber}.pdf`")
-					button(class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700") Download PDF
+				button(v-if="!isDownloading" @click="DownloadPDF" class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700") Download PDF
+				button(v-else class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700")
+					svgo-spinner(class="mx-auto")
 				button(v-if="!isSaving" @click="sendToEmail" class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700") Send to Email
 				button(v-else class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700")
 					svgo-spinner(class="mx-auto")
