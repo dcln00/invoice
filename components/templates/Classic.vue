@@ -13,7 +13,7 @@ defineExpose({
 	header(class="py-8 mx-12 space-y-4 bg-white border-b-2 border-b-black")
 		div(class="flex pb-8")
 			div(class="flex space-x-4")
-				.logo(v-if="logo" class="size-32 pointer-events-none")
+				.logo(v-if="logo" class="size-24 pointer-events-none")
 					img(:src="logo" class="w-full h-full object-contain object-center")
 				.from
 					h2(class="font-semibold") {{ input.from.company }}

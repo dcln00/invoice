@@ -13,7 +13,7 @@ defineExpose({
 	header(class="py-8 px-12 space-y-4" :style="{backgroundColor: formatting.headerBgColor, color: formatting.headerTextColor}")
 		div(class="flex pb-6")
 			div(class="flex space-x-4")
-				.logo(v-if="logo" class="size-32 pointer-events-none")
+				.logo(v-if="logo" class="size-24 pointer-events-none")
 					img(:src="logo" class="w-full h-full object-contain object-center")
 				.from
 					h2(class="font-semibold") {{ input.from.company }}
@@ -46,11 +46,12 @@ defineExpose({
 			div(class="col-span-2") Item/Description
 			div(class="col-span-1 text-center") Unit Price
 			div(class="col-span-1 text-center ps-6") Cost
-		.body-content(v-for="(item, idx) in input.items" :key="idx" class="grid grid-cols-5 gap-4 text-neutral-600 p-4 py-6")
-			div(class="col-span-1 text-center") {{ item.quantity }}
-			div(class="col-span-2 font-semibold tracking-tight") {{ item.product }}
-			div(class="col-span-1 text-center") {{ input.currency }}{{ item.unit.toLocaleString() }}.00
-			div(class="col-span-1 text-right font-semibold") {{ input.currency }}{{ item.subtotal.toLocaleString() }}.00
+		div(class="space-y-8 py-6")
+			.body-content(v-for="(item, idx) in input.items" :key="idx" class="grid grid-cols-5 gap-4 text-neutral-600 px-4 ")
+				div(class="col-span-1 text-center") {{ item.quantity }}
+				div(class="col-span-2 font-semibold tracking-tight") {{ item.product }}
+				div(class="col-span-1 text-center") {{ input.currency }}{{ item.unit.toLocaleString() }}.00
+				div(class="col-span-1 text-right font-semibold") {{ input.currency }}{{ item.subtotal.toLocaleString() }}.00
 		.body-footer(class="flex text-neutral-600")
 			.payment-terms(v-if="input.paymentTerms" class="w-1/2")
 				p(class="font-bold") Payment Terms
