@@ -21,11 +21,8 @@ const formatting = useStorage('invoice-format', {
 })
 
 const handleReset = () => {
-	formatting.value = {
-		headerBgColor: '#262626',
-		headerTextColor: '#ffffff',
-		template: 'Default'
-	}
+	formatting.value.headerBgColor = '#262626'
+	formatting.value.headerTextColor = '#ffffff'
 }
  
 const show = ref(false)
@@ -71,7 +68,6 @@ const DownloadPDF = async () => {
 	}
 
 	} finally {
-
 		isDownloading.value = false
 	}
 }

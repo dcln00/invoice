@@ -33,6 +33,9 @@ const input = useStorage('invoice', {
 	],
 })
 
+input.value.issueDate = getTodayDate()
+input.value.dueDate = getDueDate()
+
 function getDueDate() {
 	const date = new Date()
 	date.setDate(date.getDate() + 30)

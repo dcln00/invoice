@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useObjectUrl } from '@vueuse/core'
 defineProps(['input', 'handleAddItem', 'handleRemoveItem', 'handleSubtotal', 'handleTotal', 'handleTotalAfterTax', 'tax', 'discount'])
 
 useHead({

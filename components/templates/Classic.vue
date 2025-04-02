@@ -58,12 +58,12 @@ defineExpose({
 				.subtotal(class="flex border-b-2 p-4 border-b-black")
 					div
 						p(class="uppercase text-center font-semibold") Subtotal
-						div(class="text-xs pt-2 space-y-1")
+						div(class="text-xs pt-2 space-y-1" v-if="input.tax || input.discount")
 							p(v-if="input.tax") Tax ({{ input.tax }}%)
 							p(v-if="input.discount") Discount ({{ input.discount }}%)
 					div(class="ms-auto")
 						p(class="font-semibold") {{ input.currency }}{{ handleTotal().toLocaleString() }}.00
-						div(class="text-xs pt-2 space-y-1")
+						div(class="text-xs pt-2 space-y-1" v-if="input.tax || input.discount")
 							p(v-if="input.tax") {{ input.currency }}{{ tax.toLocaleString() }}.00
 							p(v-if="input.discount") ({{ input.currency }}{{ discount.toLocaleString() }}.00)
 				.total(class="flex px-4 pt-4")
