@@ -24,6 +24,7 @@ const handleReset = () => {
 	formatting.value = {
 		headerBgColor: '#262626',
 		headerTextColor: '#ffffff',
+		template: 'Default'
 	}
 }
 
