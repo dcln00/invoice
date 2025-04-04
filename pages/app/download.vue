@@ -120,7 +120,7 @@ const sendToEmail = async () => {
 <template lang="pug">
 section#body-outlet
 	div(class="flex")
-		div(:class="['bg-neutral-200 h-screen p-6 w-2/3 overflow-auto', {'!w-full': !show}]")
+		div(:class="['bg-neutral-200 h-screen p-6 lg:w-2/3 overflow-auto', {'!w-full': !show}]")
 			svgo-slider(v-if="!show" class="absolute top-5 right-4 text-neutral-800 text-lg cursor-pointer" @click="toggleShow")
 			.buttons(class="space-x-4 pb-6 flex justify-center")
 				button(v-if="!isDownloading" @click="DownloadPDF" class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700") Download PDF
@@ -130,9 +130,13 @@ section#body-outlet
 				button(v-else class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700")
 					svgo-spinner(class="mx-auto")
 				button(@click="$router.go(-1)" class="bg-white h-9 text-sm px-4 text-black hover:bg-neutral-100") Edit PDF
+			//- debugging
+			div
+				img(:src="screenshot")
 			templates-default(v-if="formatting.template === 'Default'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
 			templates-classic(v-if="formatting.template === 'Classic'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
-		div(v-if="show" class="bg-white h-screen p-6 w-1/3 overflow-auto")
+			templates-bubblegum(v-if="formatting.template === 'Bubblegum'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
+		div(v-if="show" class="max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:z-40 bg-white h-screen p-6 w-full lg:w-1/3 overflow-auto")
 			header(class="flex items-center justify-end space-x-4")
 				svgo-close(class="text-2xl text-red-500 hover:text-red-600 cursor-pointer" @click="toggleShow")
 			.settings-sections(class="space-y-12 *:border-b *:border-zinc-300 *:pb-8 last:border-b-0")
@@ -153,6 +157,7 @@ section#body-outlet
 						option(disabled value="") Select Theme
 						option(selected) Default
 						option Classic
+						option Bubblegum
 				div
 					.form-title(class="uppercase font-bold tracking-tight text-lg pb-6") Information
 					div(class="text-sm tracking-tight space-y-4")

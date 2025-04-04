@@ -17,6 +17,7 @@ export default defineNuxtConfig({
 	googleFonts: {
 		families: {
 			Jost: '100..900',
+			'Source Code Pro': true,
 		},
 		preload: true,
 	},
