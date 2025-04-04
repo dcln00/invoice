@@ -46,12 +46,12 @@ onNuxtReady(async () => {
 	height.value = h.value
 })
 
-const DownloadPDF = async () => {
+const DownloadPDF = () => {
 	try {
 		isDownloading.value = true
 
 		if(invoice.value.inv) {
-		const canvas = await $screenshot(invoice.value.inv, {
+		const canvas = $screenshot(invoice.value.inv, {
 			scale: 3
 		})
 		screenshot.value = canvas
@@ -72,12 +72,12 @@ const DownloadPDF = async () => {
 	}
 }
 
-const sendToEmail = async () => {
+const sendToEmail = () => {
 	try {
 		isSaving.value = true
 
 		if(invoice.value.inv) {
-			const canvas = await $screenshot(invoice.value.inv, {
+			const canvas = $screenshot(invoice.value.inv, {
 				scale: 3
 			})
 			screenshot.value = canvas
@@ -93,7 +93,7 @@ const sendToEmail = async () => {
 			file.value = pdf.output('datauristring')
 		}
 
-		const res = await $fetch('/api/mail', {
+		const res = $fetch('/api/mail', {
 			method: 'post',
 			body: {
 				to: email.value,
@@ -130,9 +130,6 @@ section#body-outlet
 				button(v-else class="bg-neutral-800 h-9 text-sm px-4 text-white hover:bg-neutral-700")
 					svgo-spinner(class="mx-auto")
 				button(@click="$router.go(-1)" class="bg-white h-9 text-sm px-4 text-black hover:bg-neutral-100") Edit PDF
-			//- debugging
-			div
-				img(:src="screenshot")
 			templates-default(v-if="formatting.template === 'Default'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
 			templates-classic(v-if="formatting.template === 'Classic'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
 			templates-bubblegum(v-if="formatting.template === 'Bubblegum'" ref="invoice" :input="input" :handleTotal="handleTotal" :handleTotalAfterTax="handleTotalAfterTax" :tax="tax" :discount="discount"  :formatting="formatting" :logo="logo")
