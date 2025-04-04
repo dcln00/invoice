@@ -46,12 +46,12 @@ onNuxtReady(async () => {
 	height.value = h.value
 })
 
-const DownloadPDF = () => {
+const DownloadPDF = async () => {
 	try {
 		isDownloading.value = true
 
 		if(invoice.value.inv) {
-		const canvas = $screenshot(invoice.value.inv, {
+		const canvas = await $screenshot(invoice.value.inv, {
 			scale: 3
 		})
 		screenshot.value = canvas
@@ -72,12 +72,12 @@ const DownloadPDF = () => {
 	}
 }
 
-const sendToEmail = () => {
+const sendToEmail = async () => {
 	try {
 		isSaving.value = true
 
 		if(invoice.value.inv) {
-			const canvas = $screenshot(invoice.value.inv, {
+			const canvas = await $screenshot(invoice.value.inv, {
 				scale: 3
 			})
 			screenshot.value = canvas
@@ -93,7 +93,7 @@ const sendToEmail = () => {
 			file.value = pdf.output('datauristring')
 		}
 
-		const res = $fetch('/api/mail', {
+		const res = await $fetch('/api/mail', {
 			method: 'post',
 			body: {
 				to: email.value,
