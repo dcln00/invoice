@@ -53,22 +53,6 @@ const DownloadPDF = async () => {
 		if(invoice.value.inv) {
 		const canvas = await $screenshot(invoice.value.inv, {
 			scale: 3,
-			font: {
-				preferredFormat: 'woff2',
-				cssText: `
-					@font-face {
-						font-family: 'Jost';
-						font-style: normal;
-						font-weight: 400;
-						font-display: swap;
-						src: url('https://fonts.gstatic.com/s/jost/v15/92zPtBhPNqw79Ij1Wj9Ttw.woff2') format('woff2');
-					}
-
-					body {
-						font-family: 'Jost', sans-serif;
-					}
- 				 `,
-			}
 		})
 		screenshot.value = canvas
 		const pdf = new $pdf({
