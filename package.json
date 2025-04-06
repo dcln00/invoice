@@ -10,13 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxt/fonts": "^0.11.1",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@primevue/themes": "^4.2.5",
     "@vercel/analytics": "^1.5.0",
     "@vueuse/nuxt": "^13.0.0",
     "dayjs-nuxt": "^2.1.11",
-    "jspdf": "^1.4.0",
+    "jspdf": "^3.0.1",
     "modern-screenshot": "^4.6.0",
     "nodemailer": "^6.10.0",
     "nuxt": "^3.16.0",

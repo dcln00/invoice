@@ -4,22 +4,15 @@ export default defineNuxtConfig({
 	css: ['quill/dist/quill.snow.css'],
 	modules: [
 		'@nuxtjs/tailwindcss',
-		'@nuxtjs/google-fonts',
 		'@vueuse/nuxt',
 		'dayjs-nuxt',
 		'nuxt-svgo',
 		'@primevue/nuxt-module',
+		'@nuxt/fonts',
 	],
 	tailwindcss: {
 		viewer: false,
 		cssPath: ['~/assets/tailwind.css', { injectPosition: 'first' }],
-	},
-	googleFonts: {
-		families: {
-			Jost: '100..900',
-			'Source Code Pro': true,
-		},
-		preload: true,
 	},
 	primevue: {},
 	runtimeConfig: {
