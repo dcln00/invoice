@@ -14,12 +14,6 @@ export default defineNuxtConfig({
 		viewer: false,
 		cssPath: ['~/assets/tailwind.css', { injectPosition: 'first' }],
 	},
-	fonts: {
-		defaults: {
-			weights: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-		},
-		provider: 'local'
-	},
 	primevue: {},
 	runtimeConfig: {
 		mailHost: process.env.NUXT_MAIL_HOST,
