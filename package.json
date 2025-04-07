@@ -17,7 +17,7 @@
     "@vueuse/nuxt": "^13.0.0",
     "dayjs-nuxt": "^2.1.11",
     "jspdf": "^3.0.1",
-    "modern-screenshot": "^4.6.0",
+    "modern-screenshot": "^4.5.5",
     "nodemailer": "^6.10.0",
     "nuxt": "^3.16.0",
     "nuxt-svgo": "^4.0.15",
