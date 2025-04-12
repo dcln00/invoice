@@ -24,7 +24,7 @@ const handleReset = () => {
 	formatting.value.headerBgColor = '#262626'
 	formatting.value.headerTextColor = '#ffffff'
 }
- 
+
 const show = ref(false)
 const isSaving = ref(false)
 const isDownloading = ref(false)
