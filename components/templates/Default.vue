@@ -14,7 +14,7 @@ defineExpose({
 		div(class="flex pb-6")
 			div(class="flex space-x-4")
 				.logo(v-if="logo" class="size-24 pointer-events-none")
-					img(:src="logo" class="w-full h-full object-contain object-center")
+					img(:src="logo" class="w-full h-full object-contain object-center" crossOrigin="anonymous")
 				.from
 					h2(class="font-semibold") {{ input.from.company }}
 					p {{ input.from.email }}
