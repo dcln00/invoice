@@ -13,7 +13,7 @@ defineExpose({
 	header(class="py-8 px-12 space-y-4 bg-white")
 		div(class="flex pb-6")
 			.invoice-number
-				h1(class="uppercase text-3xl font-light tracking-wider pb-6 text-neutral-400") Invoice
+				h1(class="uppercase text-3xl font-light tracking-wider pb-6 text-neutral-400 !font-custom") Invoice
 				.invoice-details(class="font-mono text-neutral-600")
 					p Invoice Number: {{ input.invoiceNumber }}
 					p Date Issued: {{ $dayjs(input.issueDate).format('D MMMM YYYY') }}
