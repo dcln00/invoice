@@ -53,6 +53,7 @@ const DownloadPDF = async () => {
 		if(invoice.value.inv) {
 		const canvas = await $screenshot(invoice.value.inv, {
 			scale: 3,
+			useCORS: true
 		})
 		screenshot.value = canvas
 		const pdf = new $pdf({
