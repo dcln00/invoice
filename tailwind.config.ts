@@ -16,6 +16,9 @@ export default <Partial<Config>>{
 					black: '#3e3e3e',
 				},
 			},
+			fontFamily: {
+				custom: ['Jost'],
+			},
 		}
 	},
 }

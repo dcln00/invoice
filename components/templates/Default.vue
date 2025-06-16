@@ -9,7 +9,7 @@ defineExpose({
 </script>
 
 <template lang="pug">
-#invoice(ref="inv" class="relative w-[8.5in] h-[11in] bg-white mx-auto")
+#invoice(ref="inv" class="relative w-[8.5in] h-[11in] bg-white mx-auto !font-custom")
 	header(class="py-8 px-12 space-y-4" :style="{backgroundColor: formatting.headerBgColor, color: formatting.headerTextColor}")
 		div(class="flex pb-6")
 			div(class="flex space-x-4")
