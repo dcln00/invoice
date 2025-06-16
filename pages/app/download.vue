@@ -40,10 +40,6 @@ const toggleShow = () => {
 	show.value = !show.value
 }
 
-onMounted(() => {
-	
-})
-
 onNuxtReady(async () => {
 	const { width: w, height: h } = useElementSize(invoice.value.inv)
 	width.value = w.value
