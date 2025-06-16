@@ -24,9 +24,9 @@ const show = ref(true)
 
 <template lang="pug">
 Analytics
-//- div(v-if="$device.isMobile" class="h-dvh flex justify-center items-center")
+div(v-if="$device.isMobile" class="h-dvh flex justify-center items-center")
 	p Kindly access app from desktop
-div
+div(v-if="$device.isDesktop")
 	#banner(v-if="show" class="fixed z-50 w-full bottom-0 left-0 py-2 bg-neutral-800 text-sm text-white flex items-center justify-center px-4")
 		NuxtLink(to="https://paystack.com/pay/invoice-by-niiaryeh")
 			div(class="flex space-x-4 group")
