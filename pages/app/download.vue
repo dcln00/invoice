@@ -86,8 +86,14 @@ const sendToEmail = async () => {
 
 		if(invoice.value.inv) {
 			const canvas = await $screenshot(invoice.value.inv, {
-				useCORS: true,
-				scale: 3
+				drawImageInterval: 1000,
+				scale: 3,
+				fetch: {
+					requestInit: {
+						mode: 'cors',
+						cache: 'no-cache',
+					}
+				}
 			})
 			screenshot.value = canvas
 			const pdf = new $pdf({
