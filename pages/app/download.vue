@@ -48,53 +48,99 @@ onNuxtReady(async () => {
 
 // Utility function to ensure fonts are loaded before screenshot
 const ensureFontsLoaded = async () => {
-	// Check if fonts are already loaded
+	// First, ensure the font is loaded in the document
+	const loadFontInDocument = async () => {
+		// Check if Jost font is already loaded
+		const existingLink = document.querySelector('link[href*="fonts.googleapis.com/css2?family=Jost"]')
+		
+		if (!existingLink) {
+			// Load Jost font from Google Fonts with all weights and styles
+			const fontLink = document.createElement('link')
+			fontLink.href = 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap'
+			fontLink.rel = 'stylesheet'
+			document.head.appendChild(fontLink)
+			
+			// Wait for the link to load
+			await new Promise((resolve) => {
+				fontLink.onload = resolve
+				fontLink.onerror = resolve // Continue even if there's an error
+				// Fallback timeout
+				setTimeout(resolve, 3000)
+			})
+		}
+	}
+	
+	// Load font in document first
+	await loadFontInDocument()
+	
+	// Wait for fonts to be ready
 	if (document.fonts && document.fonts.ready) {
 		await document.fonts.ready
-	} else {
-		// Fallback for browsers that don't support document.fonts
-		// Load Jost font from Google Fonts with all weights and styles
-		const fontLink = document.createElement('link')
-		fontLink.href = 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap'
-		fontLink.rel = 'stylesheet'
-		document.head.appendChild(fontLink)
-		
-		// Wait for fonts to load
-		await new Promise((resolve) => {
-			if (document.fonts) {
-				document.fonts.ready.then(resolve)
-			} else {
-				// Fallback timeout for older browsers
-				setTimeout(resolve, 2000)
-			}
-		})
 	}
 	
-	// Additional wait to ensure fonts are fully rendered
-	// This is especially important for Safari
-	await new Promise(resolve => setTimeout(resolve, 1000))
-	
-	// Force a repaint to ensure fonts are applied
-	if (invoice.value && invoice.value.inv) {
-		invoice.value.inv.style.display = 'none'
-		invoice.value.inv.offsetHeight // Force reflow
-		invoice.value.inv.style.display = ''
-	}
-	
-	// Additional check to ensure Jost font is loaded
+	// Safari-specific: Load specific font weights that are used in the templates
 	if (document.fonts) {
-		// Test if Jost font is loaded by checking a specific weight
-		const testElement = document.createElement('span')
-		testElement.style.fontFamily = 'Jost, sans-serif'
-		testElement.style.fontWeight = '400'
-		testElement.style.visibility = 'hidden'
-		testElement.textContent = 'Test'
-		document.body.appendChild(testElement)
+		try {
+			// Load multiple font weights that are used in the templates
+			await Promise.all([
+				document.fonts.load('300 16px Jost'), // font-light
+				document.fonts.load('400 16px Jost'), // font-normal
+				document.fonts.load('500 16px Jost'), // font-medium
+				document.fonts.load('600 16px Jost'), // font-semibold
+				document.fonts.load('700 16px Jost'), // font-bold
+				document.fonts.load('900 16px Jost'), // font-black
+			])
+		} catch (error) {
+			console.warn('Font loading error:', error)
+		}
+	}
+	
+	// Safari-specific: Longer wait and multiple repaints
+	await new Promise(resolve => setTimeout(resolve, 1500))
+	
+	// Force multiple repaints to ensure fonts are applied in Safari
+	if (invoice.value && invoice.value.inv) {
+		const element = invoice.value.inv
 		
-		// Wait for the font to be loaded
-		await document.fonts.load('400 16px Jost')
-		
-		document.body.removeChild(testElement)
+		// Multiple repaint cycles for Safari
+		for (let i = 0; i < 3; i++) {
+			element.style.display = 'none'
+			element.offsetHeight // Force reflow
+			element.style.display = ''
+			await new Promise(resolve => setTimeout(resolve, 100))
+		}
+	}
+	
+	// Final verification that fonts are loaded
+	if (document.fonts) {
+		try {
+			// Create a test element and verify font is applied
+			const testElement = document.createElement('span')
+			testElement.style.fontFamily = 'Jost, sans-serif'
+			testElement.style.fontWeight = '400'
+			testElement.style.visibility = 'hidden'
+			testElement.style.position = 'absolute'
+			testElement.style.left = '-9999px'
+			testElement.textContent = 'Test'
+			document.body.appendChild(testElement)
+			
+			// Wait a bit more for Safari to apply the font
+			await new Promise(resolve => setTimeout(resolve, 500))
+			
+			// Check if the font is actually applied
+			const computedStyle = window.getComputedStyle(testElement)
+			const fontFamily = computedStyle.fontFamily
+			
+			document.body.removeChild(testElement)
+			
+			// If font is not applied, wait a bit more
+			if (!fontFamily.includes('Jost')) {
+				console.warn('Font not applied, waiting more...')
+				await new Promise(resolve => setTimeout(resolve, 1000))
+			}
+		} catch (error) {
+			console.warn('Font verification error:', error)
+		}
 	}
 }
 
