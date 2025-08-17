@@ -46,34 +46,88 @@ onNuxtReady(async () => {
 	height.value = h.value
 })
 
+// Utility function to ensure fonts are loaded before screenshot
+const ensureFontsLoaded = async () => {
+	// Check if fonts are already loaded
+	if (document.fonts && document.fonts.ready) {
+		await document.fonts.ready
+	} else {
+		// Fallback for browsers that don't support document.fonts
+		// Load Jost font from Google Fonts with all weights and styles
+		const fontLink = document.createElement('link')
+		fontLink.href = 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap'
+		fontLink.rel = 'stylesheet'
+		document.head.appendChild(fontLink)
+		
+		// Wait for fonts to load
+		await new Promise((resolve) => {
+			if (document.fonts) {
+				document.fonts.ready.then(resolve)
+			} else {
+				// Fallback timeout for older browsers
+				setTimeout(resolve, 2000)
+			}
+		})
+	}
+	
+	// Additional wait to ensure fonts are fully rendered
+	// This is especially important for Safari
+	await new Promise(resolve => setTimeout(resolve, 1000))
+	
+	// Force a repaint to ensure fonts are applied
+	if (invoice.value && invoice.value.inv) {
+		invoice.value.inv.style.display = 'none'
+		invoice.value.inv.offsetHeight // Force reflow
+		invoice.value.inv.style.display = ''
+	}
+	
+	// Additional check to ensure Jost font is loaded
+	if (document.fonts) {
+		// Test if Jost font is loaded by checking a specific weight
+		const testElement = document.createElement('span')
+		testElement.style.fontFamily = 'Jost, sans-serif'
+		testElement.style.fontWeight = '400'
+		testElement.style.visibility = 'hidden'
+		testElement.textContent = 'Test'
+		document.body.appendChild(testElement)
+		
+		// Wait for the font to be loaded
+		await document.fonts.load('400 16px Jost')
+		
+		document.body.removeChild(testElement)
+	}
+}
+
 const DownloadPDF = async () => {
 	try {
 		isDownloading.value = true
 
 		if(invoice.value.inv) {
+			// Ensure fonts are loaded before taking screenshot
+			await ensureFontsLoaded()
 
-		const canvas = await $screenshot(invoice.value.inv, {
-			drawImageInterval: 1000,
-			scale: 3,
-			fetch: {
-				requestInit: {
-					mode: 'cors',
-					cache: 'no-cache',
+			const canvas = await $screenshot(invoice.value.inv, {
+				drawImageInterval: 1000,
+				scale: 3,
+				fetch: {
+					requestInit: {
+						mode: 'cors',
+						cache: 'no-cache',
+					}
 				}
-			}
-		})
-		screenshot.value = canvas
-		const pdf = new $pdf({
-			orientation: "p",
-			unit: "px",
-			format: [width.value, height.value]
-		})
-		const img = pdf.getImageProperties(screenshot.value)
-		const pdfw = pdf.internal.pageSize.getWidth()
-		const pdfh = (img.height * pdfw) / img.width
-		pdf.addImage(screenshot.value, 'PNG', 0, 0, pdfw, pdfh, undefined, 'FAST')
-		pdf.save(`${props.input.invoiceNumber}.pdf`)
-	}
+			})
+			screenshot.value = canvas
+			const pdf = new $pdf({
+				orientation: "p",
+				unit: "px",
+				format: [width.value, height.value]
+			})
+			const img = pdf.getImageProperties(screenshot.value)
+			const pdfw = pdf.internal.pageSize.getWidth()
+			const pdfh = (img.height * pdfw) / img.width
+			pdf.addImage(screenshot.value, 'PNG', 0, 0, pdfw, pdfh, undefined, 'FAST')
+			pdf.save(`${props.input.invoiceNumber}.pdf`)
+		}
 
 	} finally {
 		isDownloading.value = false
@@ -85,6 +139,9 @@ const sendToEmail = async () => {
 		isSaving.value = true
 
 		if(invoice.value.inv) {
+			// Ensure fonts are loaded before taking screenshot
+			await ensureFontsLoaded()
+
 			const canvas = await $screenshot(invoice.value.inv, {
 				drawImageInterval: 1000,
 				scale: 3,
