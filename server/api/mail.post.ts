@@ -5,21 +5,28 @@ export default defineEventHandler(async (event) => {
 	const config = useRuntimeConfig(event)
 
 	const transporter = nodemailer.createTransport({
-		host: config.mailHost,
-		port: 587,
+		service: 'zoho',
 		auth: {
 			user: config.mailUser,
-			pass: config.mailPass,
-		},
-		tls: {
-			rejectUnauthorized: false,
+			pass: config.mailPass, 
 		},
 	})
 
+	await transporter.verify()
+
 	await transporter.sendMail({
-		from: `Invoice by Nii Aryeh <server@niiaryeh.com>`,
+		from: {
+			name: 'Invoice by Nii Aryeh',
+			address: config.mailUser 
+		},
 		to: body.to,
 		subject: body.subject,
+		headers: {
+			'X-Priority': '3',
+			'X-MSMail-Priority': 'Normal',
+			'Importance': 'normal',
+			'X-Mailer': 'Invoice App'
+		},
 		attachments: [
 			{
 				filename: body.filename,
