@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 		service: 'zoho',
 		auth: {
 			user: config.mailUser,
-			pass: config.mailPass, 
+			pass: config.mailPass,
 		},
 	})
 
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 	await transporter.sendMail({
 		from: {
 			name: 'Invoice by Nii Aryeh',
-			address: config.mailUser 
+			address: config.mailUser
 		},
 		to: body.to,
 		subject: body.subject,
@@ -27,6 +27,7 @@ export default defineEventHandler(async (event) => {
 			'Importance': 'normal',
 			'X-Mailer': 'Invoice App'
 		},
+		text: `Invoice attached. Please find your invoice in the attached PDF file.`,
 		attachments: [
 			{
 				filename: body.filename,
