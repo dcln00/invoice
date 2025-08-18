@@ -55,7 +55,7 @@ defineExpose({
 		.body-footer(class="flex text-neutral-600")
 			.payment-terms(v-if="input.paymentTerms" class="w-1/2")
 				p(class="font-bold") Payment Terms
-				div(v-html="input.paymentTerms")
+				div(v-html="input.paymentTerms" class="!text-neutral-600")
 			.total-box(class="ms-auto w-5/12")
 				.subtotal(class="flex border-y-2 p-4 border-y-neutral-400")
 					div
