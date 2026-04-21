@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'App - Invoice by Nii Aryeh' })
+useHead({ title: 'New Invoice - Invoice by Nii Aryeh' })
 
 definePageMeta({
 	keepalive: true,
@@ -19,6 +19,12 @@ const {
 } = useInvoice()
 
 const { fileUrl, onFileChange, removeFile } = useLogoUpload()
+const { saveInvoice } = useInvoices()
+
+const handleGenerate = (): void => {
+	saveInvoice(invoice.value)
+	navigateTo(`/dashboard/${invoice.value.invoiceNumber}/download`)
+}
 </script>
 
 <template lang="pug">
@@ -133,6 +139,6 @@ section#body-outlet(class="bg-neutral-200 px-6 lg:px-12 py-8 pb-16 lg:py-20")
 				div(v-if="invoice.tax" class="text-sm text-neutral-500") Tax ({{ invoice.tax }}%): {{ taxAmount.toLocaleString() }}.00
 				div(v-if="invoice.discount" class="text-sm text-neutral-500") Discount ({{ invoice.discount }}%): {{ discountAmount.toLocaleString() }}.00
 				div(class="text-xl") Grand Total: {{ invoice.currency }} {{ grandTotal.toLocaleString() }}.00
-			button(@click="navigateTo('/app/download')" class="bg-neutral-800 h-9 text-sm w-full text-white hover:bg-neutral-700 mt-4") Generate Invoice
+			button(@click="handleGenerate" class="bg-neutral-800 h-9 text-sm w-full text-white hover:bg-neutral-700 mt-4") Generate Invoice
 		div(class="col-span-full lg:col-span-1 lg:col-start-3")
 </template>
