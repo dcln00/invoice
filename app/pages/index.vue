@@ -6,7 +6,7 @@ const handleSubmit = async (): Promise<void> => {
 	if (!isValidEmail(email.value)) return
 	try {
 		isLoading.value = true
-		await navigateTo('/app')
+		await navigateTo('/dashboard')
 	} finally {
 		isLoading.value = false
 	}
